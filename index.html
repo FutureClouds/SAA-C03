@@ -604,6 +604,111 @@
             color: var(--result-box-text);
         }
 
+        /* Mode Selection Page Styles */
+        .mode-selection-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: stretch;
+            gap: 30px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .mode-card {
+            background: var(--setup-box-bg);
+            padding: 35px 30px;
+            border-radius: 15px;
+            min-width: 280px;
+            max-width: 340px;
+            flex: 1;
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--setup-box-border);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .mode-card:hover {
+            background: rgba(138, 68, 173, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 14px 28px rgba(138, 68, 173, 0.4);
+            border-color: rgba(138, 68, 173, 0.6);
+        }
+
+        .mode-card .mode-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .mode-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--text-color);
+            font-weight: 700;
+        }
+
+        .mode-card p {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            opacity: 0.85;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .mode-select-btn {
+            margin-top: 20px;
+            padding: 12px 28px;
+            font-size: 1rem;
+            background: linear-gradient(45deg, #2980b9, #3498db);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .mode-select-btn:hover {
+            background: linear-gradient(45deg, #8e44ad, #9b59b6);
+            transform: scale(1.05);
+        }
+
+        /* Custom Range Page Styles */
+        .custom-range-input {
+            padding: 12px 15px;
+            margin: 8px;
+            font-size: 1.1rem;
+            background-color: #ecf0f1;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            width: 130px;
+            cursor: text;
+            text-align: center;
+        }
+
+        .custom-range-input:focus {
+            outline: 2px solid #3498db;
+        }
+
+        .range-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .range-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .pdf-box {
@@ -645,8 +750,35 @@
         </div>
     </div>
 
-    <!-- Page 1: Setup -->
-    <div id="page1" class="page active">
+    <!-- Page 0: Mode Selection -->
+    <div id="page0" class="page active">
+        <div class="quiz-container">
+            <h1>AWS Certified<br>
+Solutions Architect<br>
+Associate<br>
+(SAA-C03) Exam</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 40px;">SAA-C03 includes 1019 dynamic questions. Choose your preferred exam mode to begin.</p>
+
+            <div class="mode-selection-container">
+                <div class="mode-card" onclick="selectMode('custom')">
+                    <span class="mode-icon">🎯</span>
+                    <h3>Custom Range Mode</h3>
+                    <p>Select a specific range of questions by their order in the question bank (e.g., Q20 to Q81). You also set the time limit manually or choose unlimited.</p>
+                    <button class="mode-select-btn" onclick="event.stopPropagation(); selectMode('custom')">Select Mode</button>
+                </div>
+
+                <div class="mode-card" onclick="selectMode('smart')">
+                    <span class="mode-icon">🔀</span>
+                    <h3>Smart Random Mode</h3>
+                    <p>Questions are randomly shuffled from the full question bank with the standard time and count options — the classic exam experience.</p>
+                    <button class="mode-select-btn" onclick="event.stopPropagation(); selectMode('smart')">Select Mode</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 1: Setup (Smart Random Mode) -->
+    <div id="page1" class="page">
         <div class="quiz-container">
             <h1>AWS Certified<br>
 Solutions Architect<br>
@@ -688,7 +820,54 @@ Associate<br>
                 </div>
             </div>
             
-            <button onclick="startQuiz()" style="font-size: 1.5rem; padding: 20px 40px;">Start Exam</button>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="showPage('page0')" style="font-size: 1.1rem; padding: 15px 30px; background: linear-gradient(45deg, #636e72, #95a5a6);">← Back</button>
+                <button onclick="startQuiz()" style="font-size: 1.5rem; padding: 20px 40px;">Start Exam</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 1b: Setup (Custom Range Mode) -->
+    <div id="page1b" class="page">
+        <div class="quiz-container">
+            <h1>AWS Certified<br>
+Solutions Architect<br>
+Associate<br>
+(SAA-C03) Exam</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 40px;">Custom Range Mode — Set your question range and time limit.</p>
+
+            <div class="setup-container">
+                <div class="setup-box">
+                    <h3>Question Range</h3>
+                    <div class="range-row">
+                        <span class="range-label">From Question:</span>
+                        <input type="number" id="rangeFrom" class="custom-range-input" placeholder="e.g. 1" min="1" value="1">
+                        <span class="range-label">To Question:</span>
+                        <input type="number" id="rangeTo" class="custom-range-input" placeholder="e.g. 65" min="1" value="65">
+                    </div>
+                    <div style="font-size: 0.85rem; opacity: 0.75; margin-top: 8px;" id="totalQuestionsHint">Total available questions: loading...</div>
+                </div>
+
+                <div class="setup-box">
+                    <h3>Time Limit</h3>
+                    <div class="range-row">
+                        <input type="number" id="customTimeMinutes" class="custom-range-input" placeholder="Minutes" min="1" value="160" style="width: 150px;">
+                        <span class="range-label">minutes</span>
+                    </div>
+                    <div style="margin-top: 12px;">
+                        <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 1rem;">
+                            <input type="checkbox" id="unlimitedTime" onchange="toggleUnlimitedTime()" style="transform: scale(1.4); cursor: pointer;">
+                            <span>Unlimited Time</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="rangeError" class="warning" style="display:none; margin-top: 10px;"></div>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="showPage('page0')" style="font-size: 1.1rem; padding: 15px 30px; background: linear-gradient(45deg, #636e72, #95a5a6);">← Back</button>
+                <button onclick="startCustomQuiz()" style="font-size: 1.5rem; padding: 20px 40px;">Start Exam</button>
+            </div>
         </div>
     </div>
 
@@ -793,7 +972,7 @@ Associate<br>
             const pdfBox = document.getElementById('pdfBox');
             const timerBox = document.getElementById('timerBox');
             
-            if (pageId === 'page1' || pageId === 'page3') {
+            if (pageId === 'page0' || pageId === 'page1' || pageId === 'page1b' || pageId === 'page3') {
                 pdfBox.style.display = 'block';
                 timerBox.style.display = 'none';
             } else if (pageId === 'page2') {
@@ -9105,6 +9284,8 @@ IMG_C: 12.png
 D. Create a NAT Gateway in a public subnet. Update route tables to use the NAT Gateway. Assign bucket policies for all buckets with a Deny action and the following condition key:
 IMG_D: 13.png
 
+
+
         `;
 
         let questions = [];
@@ -9239,7 +9420,8 @@ function parseQuestions() {
             // Reset user answers
             userAnswers = {};
             
-            // Set up timer
+            // Set mode flag
+            window.currentMode = 'smart';
             startTime = new Date();
             startTimer();
             
@@ -9259,6 +9441,9 @@ function generateQuizHTML() {
     
     let html = '';
     selectedQuestions.forEach((q, index) => {
+        // Determine displayed question number
+        const qLabel = (window.currentMode === 'custom' && q.originalIndex != null)
+            ? `Q${q.originalIndex}` : `Q${index + 1}`;
         // Question images HTML (دعم عدة صور)
         let questionImagesHTML = '';
         if (q.questionImages && q.questionImages.length > 0) {
@@ -9277,7 +9462,7 @@ function generateQuizHTML() {
             // Composite question rendering
             html += `
                 <div class="question" id="question${index}">
-                    <h3>Q${index + 1}: ${q.question}</h3>
+                    <h3>${qLabel}: ${q.question}</h3>
                     ${questionImagesHTML}
                     <div class="composite-questions" id="composite${index}">
                         ${q.subQuestions.map((subQ, subIndex) => `
@@ -9314,7 +9499,7 @@ function generateQuizHTML() {
             
             html += `
                 <div class="question" id="question${index}">
-                    <h3>Q${index + 1}: ${q.question}</h3>
+                    <h3>${qLabel}: ${q.question}</h3>
                     ${questionImagesHTML}
                     <p style="color: #7f8c8d; font-style: italic; margin-bottom: 15px;">${selectText}</p>
                     ${q.options.map((option, optIndex) => {
@@ -9621,7 +9806,9 @@ function generateReview(timeExpired = false) {
     let html = '';
     
     selectedQuestions.forEach((q, index) => {
-        // Question images HTML for review (دعم عدة صور)
+        // Determine displayed question number
+        const qLabel = (window.currentMode === 'custom' && q.originalIndex != null)
+            ? `Q${q.originalIndex}` : `Q${index + 1}`;
         let questionImagesHTML = '';
         if (q.questionImages && q.questionImages.length > 0) {
             questionImagesHTML = q.questionImages.map(img => `
@@ -9639,7 +9826,7 @@ function generateReview(timeExpired = false) {
             // Handle composite questions in review
             html += `
                 <div class="review-question">
-                    <h4>Q${index + 1}: ${q.question}</h4>
+                    <h4>${qLabel}: ${q.question}</h4>
                     ${questionImagesHTML}
                     
                     <div style="margin-top: 15px;">
@@ -9770,7 +9957,7 @@ function generateReview(timeExpired = false) {
             
             html += `
                 <div class="review-question">
-                    <h4>Q${index + 1}: ${q.question}</h4>
+                    <h4>${qLabel}: ${q.question}</h4>
                     ${questionImagesHTML}
                     ${optionsHTML}
                     
@@ -9800,7 +9987,7 @@ function generateReview(timeExpired = false) {
 
         function restartQuiz() {
             clearInterval(timerInterval);
-            showPage('page1');
+            showPage('page0');
         }
 
         function showPage(pageId) {
@@ -9813,9 +10000,83 @@ function generateReview(timeExpired = false) {
             updatePdfButtonVisibility(pageId);
         }
 
+        function selectMode(mode) {
+            if (mode === 'custom') {
+                // Update hint with total questions count
+                document.getElementById('totalQuestionsHint').textContent = 
+                    `Total available questions: ${questions.length}`;
+                showPage('page1b');
+            } else {
+                showPage('page1');
+            }
+        }
+
+        function toggleUnlimitedTime() {
+            const checkbox = document.getElementById('unlimitedTime');
+            const timeInput = document.getElementById('customTimeMinutes');
+            timeInput.disabled = checkbox.checked;
+            timeInput.style.opacity = checkbox.checked ? '0.4' : '1';
+        }
+
+        function startCustomQuiz() {
+            const fromVal = parseInt(document.getElementById('rangeFrom').value);
+            const toVal = parseInt(document.getElementById('rangeTo').value);
+            const isUnlimited = document.getElementById('unlimitedTime').checked;
+            const customMins = parseInt(document.getElementById('customTimeMinutes').value);
+            const errorDiv = document.getElementById('rangeError');
+
+            // Validation
+            if (isNaN(fromVal) || isNaN(toVal) || fromVal < 1 || toVal < 1) {
+                errorDiv.textContent = 'Please enter valid question numbers (minimum 1).';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            if (fromVal > toVal) {
+                errorDiv.textContent = 'The "From" number must be less than or equal to the "To" number.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            if (toVal > questions.length) {
+                errorDiv.textContent = `The "To" number cannot exceed the total number of questions (${questions.length}).`;
+                errorDiv.style.display = 'block';
+                return;
+            }
+            if (!isUnlimited && (isNaN(customMins) || customMins < 1)) {
+                errorDiv.textContent = 'Please enter a valid number of minutes (minimum 1).';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            errorDiv.style.display = 'none';
+
+            // Select questions by range (1-based index, sequential order)
+            selectedQuestions = questions.slice(fromVal - 1, toVal).map((q, i) => ({
+                ...q,
+                originalIndex: fromVal + i  // 1-based original question number
+            }));
+
+            // Set time limit
+            timeLimit = isUnlimited ? 'unlimited' : String(customMins);
+
+            // Set mode flag
+            window.currentMode = 'custom';
+
+            // Reset user answers
+            userAnswers = {};
+
+            // Set up timer
+            startTime = new Date();
+            startTimer();
+
+            // Generate quiz HTML
+            generateQuizHTML();
+
+            // Show quiz page
+            showPage('page2');
+        }
+
         // Initialize PDF button visibility on page load
         document.addEventListener('DOMContentLoaded', function() {
-            updatePdfButtonVisibility('page1');
+            updatePdfButtonVisibility('page0');
         });
     </script>
 </body>
